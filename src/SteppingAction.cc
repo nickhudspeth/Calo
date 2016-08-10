@@ -37,6 +37,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep) {
 	const G4StepPoint *thePreStepPoint = aStep->GetPreStepPoint();
 	const G4StepPoint *thePostStepPoint = aStep->GetPostStepPoint();
 
+	double bFieldPre[3] = {0,0,0};
+    double bFieldPost[3] = {0,0,0};
+    double bFieldPosPre[4] = {0,0,0,0};
+    double bFieldPosPost[4] = {0,0,0,0};
 	G4Track* lTrack = aStep->GetTrack();
 	G4double kinEng = lTrack->GetKineticEnergy();
 	G4int pdgID = lTrack->GetDefinition()->GetPDGEncoding();
@@ -142,6 +146,16 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep) {
 
 						//}
 				}
+
+            //Get Magnetic Field Vectors at pre and post positions
+                for(int i = 0; i < 3; i++)
+            {
+                bFieldPosPre[i] = position[i];
+                bFieldPosPost[i] = postPosition[i]; 
+            }
+            //G4TransportationManager::GetTransportationManager()->GetFieldManager()->GetDetectorField()->GetFieldValue(bFieldPosPre, bFieldPre);
+            G4TransportationManager::GetTransportationManager()->GetFieldManager()->GetDetectorField()->GetFieldValue(bFieldPosPost, bFieldPost);
+            genPart.setBField(bFieldPost[0],bFieldPost[1], bFieldPost[2]);
 
 			}
 

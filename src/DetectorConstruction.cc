@@ -40,7 +40,7 @@ DetectorConstruction::DetectorConstruction(G4int ver, G4int mod) :
 		//Add the target
 
 	DefineMaterials();
-	SetMagField(0);
+    SetMagField("b18d36.dat", -44.2248*mm);
 	m_detectorMessenger = new DetectorMessenger(this);
 	UpdateCalorSize();
 }
@@ -556,6 +556,19 @@ void DetectorConstruction::SetMagField(G4double fieldValue) {
 	fieldMgr->SetDetectorField(m_magField);
 	fieldMgr->CreateChordFinder(m_magField);
 	fieldMgr->SetDetectorField(m_magField);
+}
+
+void DetectorConstruction::SetMagField(char *fileName, G4double zOffset)
+{
+   // G4cout << "!!@! ENTERING SETMAGFIELD !!@!" << G4endl;
+    G4FieldManager* fieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+    if(p_magField) delete p_magField; // Delete the existing magnetic field
+    p_magField = new PurgMagTabulatedField3D(fileName, zOffset);
+    fieldMgr->SetDetectorField(p_magField);
+    fieldMgr->CreateChordFinder(p_magField);
+    fieldMgr->SetDetectorField(p_magField);
+    //G4cout << "!!@! EXITING SETMAGFIELD !!@!" << G4endl;
+
 }
 
 void DetectorConstruction::SetDetModel(G4int model) {
