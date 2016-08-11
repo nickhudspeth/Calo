@@ -88,7 +88,6 @@ public:
 	G4UniformMagField* m_magField;      //pointer to the magnetic field
     void SetMagField(char *fileName, G4double zOffset);
 	PurgMagTabulatedField3D *p_magField;
-    G4UniformMagField* m_magField;      //pointer to the magnetic field
 
 	/**
 	 @short DTOR
